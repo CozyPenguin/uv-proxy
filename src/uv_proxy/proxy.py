@@ -66,6 +66,7 @@ class ProxyService:
         self.client = client or httpx.AsyncClient(
             http2=True,
             follow_redirects=True,
+            trust_env=False,
             timeout=httpx.Timeout(settings.request_timeout),
             limits=httpx.Limits(
                 max_connections=100,
