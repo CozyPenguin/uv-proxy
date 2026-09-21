@@ -10,7 +10,8 @@ const responseTabs = [...document.querySelectorAll(".tab")];
 const curlPreview = document.querySelector("#curl-preview code");
 const history = [];
 let currentHeaders = {};
-let currentBody = "Send a request to bring the response into focus.";
+let currentBody = "Send a probe to bring the response into focus.";
+let proxyAddress = "127.0.0.1:8888";
 
 function parseHeaders(value) {
   return value.split("\n").reduce((result, line) => {
@@ -131,7 +132,7 @@ async function runRequest(event) {
     setResultState("error", "Needs attention");
   } finally {
     sendButton.disabled = false;
-    sendButton.querySelector(".button-label").textContent = "Send request";
+    sendButton.querySelector(".button-label").textContent = "Probe through proxy";
   }
 }
 
@@ -146,6 +147,26 @@ document.querySelector("#copy-curl").addEventListener("click", async (event) => 
   event.currentTarget.textContent = "Copied";
   setTimeout(() => { event.currentTarget.textContent = "Copy"; }, 1200);
 });
+document.querySelector("#copy-address").addEventListener("click", async (event) => {
+  await navigator.clipboard?.writeText(proxyAddress);
+  event.currentTarget.textContent = "Copied";
+  setTimeout(() => { event.currentTarget.textContent = "Copy address"; }, 1200);
+});
+
+async function loadHealth() {
+  try {
+    const response = await fetch("/api/health");
+    const health = await response.json();
+    if (!response.ok) return;
+    proxyAddress = health.proxy_host + ":" + health.proxy_port;
+    ["#proxy-address", "#endpoint-address", "#setup-address"].forEach((selector) => {
+      document.querySelector(selector).textContent = proxyAddress;
+    });
+  } catch {
+    document.querySelector("#proxy-address").textContent = "offline";
+  }
+}
 
 updateCurl();
 renderHistory();
+loadHealth();

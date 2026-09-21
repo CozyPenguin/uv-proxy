@@ -19,7 +19,7 @@
           <span>uv <em>/</em> proxy</span>
         </a>
         <div class="topbar-actions">
-          <span class="status-pill"><span class="pulse"></span> Fast lane <span class="divider"></span> HTTP/2</span>
+          <span class="status-pill"><span class="pulse"></span> Proxy live <span class="divider"></span> <span id="proxy-address">127.0.0.1:8888</span></span>
           <a class="github-link" href="https://github.com/CozyPenguin/uv-proxy" target="_blank" rel="noreferrer">
             <span>GitHub</span>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.61-3.37-1.18-3.37-1.18-.45-1.15-1.11-1.45-1.11-1.45-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.35 1.09 2.92.84.09-.65.35-1.09.64-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.6 9.6 0 0 1 12 7.02c.85 0 1.7.11 2.5.34 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.86v2.75c0 .27.18.58.69.48A10 10 0 0 0 12 2Z" /></svg>
@@ -29,22 +29,32 @@
 
       <section class="hero">
         <div class="eyebrow"><span class="eyebrow-dot"></span> A calm place for noisy requests</div>
-        <h1>Proxy anything.<br /><span>Keep the flow.</span></h1>
-        <p class="hero-copy">A tiny, fast HTTP proxy with a liquid-smooth control room. Send a request, see the signal, stay in motion.</p>
+        <h1>A real forward proxy.<br /><span>Keep the flow.</span></h1>
+        <p class="hero-copy">A small HTTP/HTTPS forward proxy with a liquid-smooth control room. Point a client at the fast lane, then watch the signal here.</p>
       </section>
 
       <section class="workspace" aria-label="Proxy workspace">
         <article class="glass-card builder-card">
           <div class="card-heading">
             <div>
-              <span class="section-kicker">01 / compose</span>
-              <h2>Request builder</h2>
+              <span class="section-kicker">01 / connect</span>
+              <h2>Proxy endpoint</h2>
             </div>
-            <span class="mini-tag">pooled connections</span>
+            <span class="mini-tag">clients welcome</span>
           </div>
 
+          <div class="endpoint-box">
+            <div class="endpoint-topline"><span class="live-label"><i></i> LISTENING</span><button id="copy-address" class="copy-button" type="button">Copy address</button></div>
+            <strong id="endpoint-address">127.0.0.1:8888</strong>
+            <p>Use this as your HTTP proxy. HTTPS clients will negotiate a CONNECT tunnel automatically.</p>
+            <div class="endpoint-tags"><span>HTTP forward</span><span>HTTPS CONNECT</span><span>Keep-alive pool</span></div>
+          </div>
+
+          <div class="setup-row"><span class="setup-number">01</span><p>Set your browser, curl, or app proxy to <code id="setup-address">127.0.0.1:8888</code>.</p></div>
+          <div class="setup-row"><span class="setup-number">02</span><p>Use the probe below to confirm a destination is reachable through the listener.</p></div>
+
+          <div class="probe-label"><span class="field-label">Probe destination <span>optional</span></span></div>
           <form id="proxy-form">
-            <label class="field-label" for="url">Destination</label>
             <div class="url-row">
               <select id="method" aria-label="HTTP method">
                 <option>GET</option>
@@ -72,15 +82,15 @@
             <div class="form-footer">
               <div class="guard-note"><span class="shield-icon">✦</span> Public targets only by default</div>
               <button class="send-button" type="submit">
-                <span class="button-label">Send request</span>
+                <span class="button-label">Probe through proxy</span>
                 <span class="button-arrow">↗</span>
               </button>
             </div>
           </form>
 
           <div class="feature-row">
-            <span><i></i> Keep-alive pool</span>
-            <span><i></i> HTTP/2 ready</span>
+            <span><i></i> HTTP forward</span>
+            <span><i></i> HTTPS CONNECT</span>
             <span><i></i> SSRF guard</span>
           </div>
         </article>
@@ -89,15 +99,15 @@
           <div class="card-heading response-heading">
             <div>
               <span class="section-kicker">02 / observe</span>
-              <h2>Response signal</h2>
+              <h2>Probe signal</h2>
             </div>
-            <div id="result-status" class="result-status idle"><span class="status-dot"></span><span>Ready</span></div>
+            <div id="result-status" class="result-status idle"><span class="status-dot"></span><span>Proxy live</span></div>
           </div>
 
           <div class="response-summary">
             <div class="summary-main">
               <strong id="status-code">—</strong>
-              <span id="status-text">Waiting for a request</span>
+              <span id="status-text">Waiting for a probe</span>
             </div>
             <div class="summary-meta"><span id="response-url">No signal yet</span><span id="response-time">— ms</span></div>
           </div>
@@ -116,7 +126,7 @@
             <div class="code-window-bar"><span></span><span></span><span></span><em id="code-label">response preview</em></div>
             <pre id="response-preview"><code>Send a request to bring the response into focus.</code></pre>
           </div>
-          <p id="response-note" class="response-note">Your response preview will appear here. Large bodies are capped for a calm UI.</p>
+          <p id="response-note" class="response-note">The listener is ready. Probe a public target to inspect one request path.</p>
         </article>
       </section>
 

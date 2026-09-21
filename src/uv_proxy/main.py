@@ -12,6 +12,7 @@ from pydantic import BaseModel, Field
 
 from .config import get_settings
 from .proxy import ProxyError, ProxyService, iter_response
+from .server import ForwardProxyServer
 
 BASE_DIR = Path(__file__).resolve().parent
 STATIC_DIR = BASE_DIR / "static"
@@ -38,8 +39,13 @@ class ProxyResponse(BaseModel):
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     app.state.proxy = ProxyService(settings)
-    yield
-    await app.state.proxy.close()
+    app.state.forward_proxy = ForwardProxyServer(settings, app.state.proxy)
+    await app.state.forward_proxy.start()
+    try:
+        yield
+    finally:
+        await app.state.forward_proxy.stop()
+        await app.state.proxy.close()
 
 
 app = FastAPI(title="uv proxy", version="0.1.0", lifespan=lifespan)
@@ -58,8 +64,15 @@ async def index() -> FileResponse:
 
 
 @app.get("/api/health")
-async def health() -> dict[str, str]:
-    return {"status": "ok", "service": "uv-proxy"}
+async def health(request: Request) -> dict[str, str | int]:
+    proxy: ForwardProxyServer = request.app.state.forward_proxy
+    proxy_host, proxy_port = proxy.address
+    return {
+        "status": "ok",
+        "service": "uv-proxy",
+        "proxy_host": proxy_host,
+        "proxy_port": proxy_port,
+    }
 
 
 @app.post("/api/proxy", response_model=ProxyResponse)

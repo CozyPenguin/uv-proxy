@@ -10,6 +10,8 @@ class Settings(BaseSettings):
 
     host: str = "127.0.0.1"
     port: int = 8000
+    proxy_host: str = "127.0.0.1"
+    proxy_port: int = 8888
     request_timeout: float = 12.0
     max_body_bytes: int = 524_288
     allow_private_targets: bool = False

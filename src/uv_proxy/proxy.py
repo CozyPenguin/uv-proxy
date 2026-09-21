@@ -22,7 +22,7 @@ HOP_BY_HOP_HEADERS = {
     "transfer-encoding",
     "upgrade",
 }
-FORWARD_REQUEST_HEADERS = HOP_BY_HOP_HEADERS | {"host", "content-length"}
+FORWARD_REQUEST_HEADERS = HOP_BY_HOP_HEADERS | {"host", "content-length", "proxy-connection"}
 VISIBLE_RESPONSE_HEADERS = {
     "cache-control",
     "content-type",
