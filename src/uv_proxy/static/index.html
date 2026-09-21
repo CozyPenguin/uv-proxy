@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#11131a" />
+    <title>uv proxy — fast by nature</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="aurora aurora-one"></div>
+    <div class="aurora aurora-two"></div>
+    <div class="grain"></div>
+
+    <main class="shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="uv proxy home">
+          <span class="brand-mark"><span></span><span></span><span></span></span>
+          <span>uv <em>/</em> proxy</span>
+        </a>
+        <div class="topbar-actions">
+          <span class="status-pill"><span class="pulse"></span> Fast lane <span class="divider"></span> HTTP/2</span>
+          <a class="github-link" href="https://github.com/CozyPenguin/uv-proxy" target="_blank" rel="noreferrer">
+            <span>GitHub</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.16 19.49c.5.09.68-.22.68-.48v-1.7c-2.78.61-3.37-1.18-3.37-1.18-.45-1.15-1.11-1.45-1.11-1.45-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.9 1.53 2.35 1.09 2.92.84.09-.65.35-1.09.64-1.34-2.22-.25-4.56-1.11-4.56-4.94 0-1.09.39-1.98 1.03-2.68-.1-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02A9.6 9.6 0 0 1 12 7.02c.85 0 1.7.11 2.5.34 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.2 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.69-4.57 4.94.36.31.68.92.68 1.86v2.75c0 .27.18.58.69.48A10 10 0 0 0 12 2Z" /></svg>
+          </a>
+        </div>
+      </header>
+
+      <section class="hero">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> A calm place for noisy requests</div>
+        <h1>Proxy anything.<br /><span>Keep the flow.</span></h1>
+        <p class="hero-copy">A tiny, fast HTTP proxy with a liquid-smooth control room. Send a request, see the signal, stay in motion.</p>
+      </section>
+
+      <section class="workspace" aria-label="Proxy workspace">
+        <article class="glass-card builder-card">
+          <div class="card-heading">
+            <div>
+              <span class="section-kicker">01 / compose</span>
+              <h2>Request builder</h2>
+            </div>
+            <span class="mini-tag">pooled connections</span>
+          </div>
+
+          <form id="proxy-form">
+            <label class="field-label" for="url">Destination</label>
+            <div class="url-row">
+              <select id="method" aria-label="HTTP method">
+                <option>GET</option>
+                <option>POST</option>
+                <option>PUT</option>
+                <option>PATCH</option>
+                <option>DELETE</option>
+                <option>HEAD</option>
+                <option>OPTIONS</option>
+              </select>
+              <input id="url" name="url" type="url" spellcheck="false" value="https://api.github.com/repos/astral-sh/uv" required />
+            </div>
+
+            <div class="subgrid">
+              <div>
+                <label class="field-label" for="headers">Headers <span>optional</span></label>
+                <textarea id="headers" rows="5" placeholder="accept: application/json&#10;x-demo: true"></textarea>
+              </div>
+              <div>
+                <label class="field-label" for="body">Body <span>optional</span></label>
+                <textarea id="body" rows="5" placeholder='{"hello":"world"}'></textarea>
+              </div>
+            </div>
+
+            <div class="form-footer">
+              <div class="guard-note"><span class="shield-icon">✦</span> Public targets only by default</div>
+              <button class="send-button" type="submit">
+                <span class="button-label">Send request</span>
+                <span class="button-arrow">↗</span>
+              </button>
+            </div>
+          </form>
+
+          <div class="feature-row">
+            <span><i></i> Keep-alive pool</span>
+            <span><i></i> HTTP/2 ready</span>
+            <span><i></i> SSRF guard</span>
+          </div>
+        </article>
+
+        <article class="glass-card response-card">
+          <div class="card-heading response-heading">
+            <div>
+              <span class="section-kicker">02 / observe</span>
+              <h2>Response signal</h2>
+            </div>
+            <div id="result-status" class="result-status idle"><span class="status-dot"></span><span>Ready</span></div>
+          </div>
+
+          <div class="response-summary">
+            <div class="summary-main">
+              <strong id="status-code">—</strong>
+              <span id="status-text">Waiting for a request</span>
+            </div>
+            <div class="summary-meta"><span id="response-url">No signal yet</span><span id="response-time">— ms</span></div>
+          </div>
+
+          <div class="metrics">
+            <div><span>Latency</span><strong id="metric-latency">—</strong></div>
+            <div><span>Payload</span><strong id="metric-size">—</strong></div>
+            <div><span>Method</span><strong id="metric-method">GET</strong></div>
+          </div>
+
+          <div class="response-tabs" role="tablist">
+            <button class="tab active" data-tab="body" type="button">Body</button>
+            <button class="tab" data-tab="headers" type="button">Headers</button>
+          </div>
+          <div class="code-window">
+            <div class="code-window-bar"><span></span><span></span><span></span><em id="code-label">response preview</em></div>
+            <pre id="response-preview"><code>Send a request to bring the response into focus.</code></pre>
+          </div>
+          <p id="response-note" class="response-note">Your response preview will appear here. Large bodies are capped for a calm UI.</p>
+        </article>
+      </section>
+
+      <section class="bottom-grid">
+        <article class="glass-card recent-card">
+          <div class="card-heading compact-heading"><div><span class="section-kicker">03 / rhythm</span><h2>Recent requests</h2></div><span id="request-count" class="count-pill">0</span></div>
+          <div id="recent-list" class="recent-list"><div class="empty-recent">No requests yet — the first one sets the tempo.</div></div>
+        </article>
+
+        <article class="glass-card snippet-card">
+          <div class="card-heading compact-heading"><div><span class="section-kicker">quick copy</span><h2>Equivalent curl</h2></div><button id="copy-curl" class="copy-button" type="button">Copy</button></div>
+          <pre id="curl-preview"><code>curl "https://api.github.com/repos/astral-sh/uv"</code></pre>
+          <div class="snippet-caption"><span class="terminal-dot"></span> Works anywhere curl does</div>
+        </article>
+      </section>
+
+      <footer class="footer"><span>Made for the fast path.</span><span>uv-proxy <span class="footer-dot">·</span> 0.1.0</span></footer>
+    </main>
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>
